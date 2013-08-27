@@ -1,0 +1,9 @@
+Package: VaRiant
+Type: Package
+Title: R package to analyze and filter Varaint produced by next generation sequencing pipelines.
+Version: 0.1.0
+Date: 2013-08-27
+Author: Robert Schaefer <schae234@umn.edu>
+Maintainer: Robert Schaefer <schae234@umn.edu>
+Description: More about what it does (maybe more than one line)
+License: MIT License
