@@ -1,7 +1,19 @@
 #############################################################
 # Define a VCF Class
 # 
+
+require("stringr")
+
 VCF <- function(vcf_file, ...) UseMethod("VCF")
+
+read.vcf <- function(vcf_file){
+    open(con <- file(vcf_file))
+    num_headers = 0
+    while(str_detect(readLines(con,n=1L),"##"))
+        num_headers = num_headers + 1
+    close(con)
+    read.table(vcf_file,comment.char="",skip=num_headers,header=T)
+}
 
 VCF.default <- function(vcf_file, ... ){
     # Set the default method 
@@ -10,7 +22,7 @@ VCF.default <- function(vcf_file, ... ){
     # read in the VCF file
     tryCatch(
         { 
-          self$tbl <- read.table(vcf_file,header=T)
+            self$tbl <- read.vcf(vcf_file)
             # VCF files have 8 mandatory fields:
             self$CHROM <- self$tbl[,1]
             self$POS   <- self$tbl[,2]
@@ -25,12 +37,12 @@ VCF.default <- function(vcf_file, ... ){
                 self$FORMAT <- self$tbl[,9]
                 # Assign the rest as an allele table
                 self$INDS <- names(
-                    self$tbl[!names(self$tbl) %in% c("CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT")]
+                    self$tbl[!names(self$tbl) %in% c("X.CHROM","POS","ID","REF","ALT","QUAL","FILTER","INFO","FORMAT")]
                 )
                 self$ALLELES <- Alleles(self$tbl[,10:ncol(self$tbl)])
             }
             # Finally, set some 
-            self$VARIDs <- do.call(paste,c(self$tbl[,c('CHROM',"POS")],sep='.'))
+            self$VARIDs <- do.call(paste,c(self$tbl[,c('X.CHROM',"POS")],sep='.'))
 
         },
         error = function(){stop(paste("Could not read input file: ", vcf_file, sep=""))}
@@ -61,6 +73,10 @@ scores.VCF <- function(VCF, ... ){
 Alleles.VCF <- function(VCF, inds, rows, ... ){
     if(is.na(inds)) stop("you must specify individuals")
     Alleles(VCF$tbl[rows,inds])
+}
+
+length.VCF <- function(VCF){
+    length(VCF$POS)
 }
 
 ##################################################################

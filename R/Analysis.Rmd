@@ -1,0 +1,11 @@
+source("~/Codes/VaRiant/R/VaRiant.R")
+
+
+``` {r}
+    # Read in the input files
+    sam6x = VCF("~/Codes/VaRiant/test/samtools.MOR_6X_run2.Equus_cab_mito3.raw.vcf")
+    sam12x = VCF("~/Codes/VaRiant/test/samtools.MOR_12X_run2.Equus_cab_mito3.raw.vcf")
+    gatk6x = VCF('~/Codes/VaRiant/test/gatk.MOR_6X_run2.Equus_cab_mito3.raw.vcf')
+    gatk12x = VCF('~/Codes/VaRiant/test/gatk.MOR_12X_run2.Equus_cab_mito3.raw.vcf')
+
+```
